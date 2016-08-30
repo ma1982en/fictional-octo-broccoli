@@ -10,32 +10,17 @@
 
     <Grid Background="{ThemeResource SystemControlBackgroundChromeBlackHighBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>   
-            <ColumnDefinition Width="2*"/>   
+            <ColumnDefinition />   
+            <ColumnDefinition />   
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <ListView Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" ItemsSource="{Binding ScannedNetworks}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderThickness="3" BorderBrush="Aqua" Margin="0,10,0,0">
-                        <StackPanel>
-                            <TextBlock Foreground="AntiqueWhite" Text="{Binding MacAddress}" />
-                            <TextBlock Foreground="AntiqueWhite" Text="{Binding Leistung}" />
-                            <TextBlock Foreground="AntiqueWhite" Text="{Binding Ssid}"/>
-                            <TextBlock Foreground="AntiqueWhite" Text="{Binding BeaconIntervall}"/>
-                            <TextBlock Foreground="AntiqueWhite" Text="{Binding ChannelFrequence}"/>
-                            <TextBlock Foreground="AntiqueWhite" Text="{Binding UpTime}"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Button Grid.Row="1" Grid.Column="0" Content="SCAN" Command="{Binding ScanCommand}" FontSize="30" Background="Red" HorizontalAlignment="Stretch" />
-        <Button Grid.Row="1" Grid.Column="1" Content="STOP" Command="{Binding StopCommand}" FontSize="30" Background="Green" HorizontalAlignment="Stretch"/>
+        
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding PreviousViewCommand}" Content="BEFORE" HorizontalAlignment="Stretch" Background="CornflowerBlue"/>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding NextViewCommand}" Content="NEXT" HorizontalAlignment="Stretch" Background="GreenYellow"/>
+        <ContentPresenter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding View}"/>
 
     </Grid>
 </Page>

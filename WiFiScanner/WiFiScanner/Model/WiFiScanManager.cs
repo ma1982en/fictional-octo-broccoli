@@ -10,7 +10,7 @@ namespace WiFiScanner.Model
 {
     public class WiFiScanManager
     {
-        private readonly ObservableCollection<CurrentWiFiNetwork> _currentWiFiNetworks;
+        private ObservableCollection<CurrentWiFiNetwork> _currentWiFiNetworks;
         private WiFiAdapter _adapter;
 
         public WiFiScanManager(ObservableCollection<CurrentWiFiNetwork> scannedNetworks)

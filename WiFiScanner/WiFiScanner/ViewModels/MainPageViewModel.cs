@@ -1,47 +1,75 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
-using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
-using WiFiScanner.Model;
+using WiFiScanner.Views;
 
 namespace WiFiScanner.ViewModels
 {
     public class MainPageViewModel : BindableBase
     {
-        public ObservableCollection<CurrentWiFiNetwork> ScannedNetworks { get; set; }
-        public ICommand ScanCommand { get; set; }
-        public ICommand StopCommand { get; set; }
-        public DispatcherTimer Timer { get; set; }
+        public UserControl View
+        {
+            get { return _view; }
+            set { _view = value; this.OnPropertyChanged(); }
+        }
+
+        public ICommand NextViewCommand { get; set; }
+        public ICommand PreviousViewCommand { get; set; }
 
         public MainPageViewModel()
         {
-            ScannedNetworks = new ObservableCollection<CurrentWiFiNetwork>();
-            ScanCommand = new DelegateCommand(OnStartScan);
-            StopCommand = new DelegateCommand(OnStopScan);
-            _wifimanager = new WiFiScanManager(ScannedNetworks);
-            Timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 5)};
-            Timer.Tick += OnTimerElapsed;
+            LoadViews();
+            NextViewCommand = new DelegateCommand(OnGoNextView);
+            PreviousViewCommand = new DelegateCommand(OnGoPreviousView);           
         }
 
-        private void OnTimerElapsed(object sender, object o)
+        private void OnGoNextView()
         {
-            _wifimanager.StartRequestCurrentNetworksAsync();
+            if (View == null)
+            {
+                View = _loadedViews[0];
+                return;
+            }
+
+            var currentindex = _loadedViews.IndexOf(View);
+
+            currentindex++;
+
+            if (currentindex < _loadedViews.Count)
+                View = _loadedViews[currentindex];
+            else
+                View = _loadedViews[0];
         }
 
-        private void OnStartScan()
+        private void OnGoPreviousView()
         {
-            _wifimanager.SetAdapter();
-            Timer.Start();
+            if (View == null)
+            {
+                View = _loadedViews[0];
+                return;
+            }
+
+            var index = _loadedViews.IndexOf(View);
+
+            index--;
+
+            if (index < 0)
+                View = _loadedViews[_loadedViews.Count - 1];
+            else
+                View = _loadedViews[index];
         }
 
-        private void OnStopScan()
+        private void LoadViews()
         {
-            Timer.Stop();
+            _loadedViews.Clear();
+            _loadedViews.Add(new WiFiView {DataContext = new WifiScannerViewModel()});
+            _loadedViews.Add(new BatteryView {DataContext = new BatteryViewModel()});
+            View = _loadedViews[0];
         }
 
-        private readonly WiFiScanManager _wifimanager;
-
+        private readonly List<UserControl> _loadedViews = new List<UserControl>();
+        private UserControl _view;
     }
 }

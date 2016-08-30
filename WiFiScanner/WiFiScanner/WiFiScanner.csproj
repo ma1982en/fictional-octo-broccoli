@@ -100,8 +100,17 @@
     </Compile>
     <Compile Include="Model\CurrentWiFiNetwork.cs" />
     <Compile Include="Model\WiFiScanManager.cs" />
+    <Compile Include="Model\WindowsBatteryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BatteryViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\WifiScannerViewModel.cs" />
+    <Compile Include="Views\BatteryView.xaml.cs">
+      <DependentUpon>BatteryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WiFiView.xaml.cs">
+      <DependentUpon>WiFiView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -128,7 +137,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\BatteryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WiFiView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
