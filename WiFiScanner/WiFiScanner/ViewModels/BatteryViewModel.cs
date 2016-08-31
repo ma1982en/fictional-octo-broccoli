@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Windows.Devices.Enumeration;
 using Prism.Mvvm;
@@ -41,7 +42,10 @@ namespace WiFiScanner.ViewModels
                     //// Update UI
                     //AddReportUI(BatteryReportPanel, report, battery.DeviceId);
                 }
-                catch { /* Add error handling, as applicable */ }
+                catch(Exception exception)
+                {
+                    Debug.WriteLine(exception.Message);
+                }
             }
         }
     }

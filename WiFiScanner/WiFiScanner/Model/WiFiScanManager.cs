@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -55,11 +56,10 @@ namespace WiFiScanner.Model
 
         private  void FindAllNetworks(WiFiAdapter wifiAdapter)
         {
-            _currentWiFiNetworks.Clear();
-            foreach (var currentWiFiNetwork in wifiAdapter
+            var scannedNetworks = wifiAdapter
                 .NetworkReport
                 .AvailableNetworks
-                .OrderByDescending( x => x.NetworkRssiInDecibelMilliwatts)
+                .OrderByDescending(x => x.NetworkRssiInDecibelMilliwatts)
                 .ToList().Select(network => new CurrentWiFiNetwork
                 {
                     Ssid = network.Ssid,
@@ -68,13 +68,26 @@ namespace WiFiScanner.Model
                     UpTime = network.Uptime.ToString(),
                     BeaconIntervall = network.BeaconInterval.ToString(),
                     ChannelFrequence = network.ChannelCenterFrequencyInKilohertz.ToString()
-                   
-                }))
-            {
-                _currentWiFiNetworks.Add(currentWiFiNetwork);
-            }
+
+                });
+
+           UpdateScannedData(scannedNetworks);
         }
 
+        private void UpdateScannedData(IEnumerable<CurrentWiFiNetwork> updateNetworks)
+        {
+            foreach (var currentWiFiNetwork in updateNetworks)
+            {
+                var foundedNetwork = _currentWiFiNetworks.FirstOrDefault(x => x.MacAddress.Equals(currentWiFiNetwork.MacAddress));
+                if (foundedNetwork == null)
+                {
+                    _currentWiFiNetworks.Add(currentWiFiNetwork);
+                    continue;
+                }
+                foundedNetwork.Leistung = currentWiFiNetwork.Leistung;
+                foundedNetwork.UpTime = currentWiFiNetwork.UpTime;
+            }
+        }
        
     }
 }
